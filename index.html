@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ruler</title>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<style>
+	* {
+		box-sizing: border-box;
+	}
+	.ruler {
+		height: 100px;
+		position: relative;
+	}
+	.ruler .top {
+		height: 50%;
+		border-bottom: 1px solid black;
+	}
+	.ruler .bottom {
+		height: 50%;
+		border-top: 1px solid black;
+	}
+	.ruler .digit {
+		position: absolute;
+		transform: translateX(-50%);
+	}
+	.ruler .bottom .digit {
+		bottom: 0;
+	}
+	.ruler .tick {
+		width: 1px;
+		height: 6.25%;
+		position: absolute;
+		border-left: 1px solid black;
+	}
+	.ruler .top .tick {
+		bottom: 50%;
+	}
+	.ruler .quarter.tick {
+		height: 12.5%;
+	}
+	.ruler .half.tick {
+		height: 25%;
+	}
+	.ruler .unit {
+		position: absolute;
+	}
+	.ruler .top .unit {
+		top: 15px;
+		left: 15px;
+	}
+	.ruler .bottom .unit {
+		top: 65px;
+		left: 5px;
+	}
+</style>
+
+</head>
+<body>
+	<div class="tick"></div>
+	<div class="digit"></div>
+	<div class="ruler speed">
+		<div class="top">
+			<div class="unit">MPH</div>
+		</div>
+		<div class="bottom">
+			<div class="unit">km/h</div>
+		</div>
+	</div>
+	<br><br>
+	<div class="ruler temperature">
+		<div class="top">
+			<div class="unit">&deg;F</div>
+		</div>
+		<div class="bottom">
+			<div class="unit">&deg;C</div>
+		</div>
+	</div>
+	<br><br>
+	<div class="ruler length">
+		<div class="top">
+			<div class="unit">in</div>
+		</div>
+		<div class="bottom">
+			<div class="unit">cm</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+jQuery(function($) {
+	console.log('loaded');
+	var tick = $('.tick');
+	var digit = $('.digit');
+	var speed = $('.ruler.speed');
+	var width = speed.innerWidth();
+	var length = $('.ruler.length');
+	var temperature = $('.ruler.temperature');
+	
+	function createTicks(side, bottom, top) {
+		var ticks = top - bottom;
+		var space = width / ticks;
+		for (var i=bottom, s=0; s<=width; i+=1, s+=space) {
+			var t = tick.clone().css('left', s);
+			if (i%10 == 0) {
+				side.append(digit.clone().text(i).css('left', s));
+				t.addClass('half');
+			} else if (i%5 == 0) {
+				t.addClass('quarter');
+			}
+			side.append(t);
+		}
+	}
+	
+	createTicks(speed.find('.top'), 0, 211); // miles
+	createTicks(speed.find('.bottom'), 0, 341); // kilometers
+	
+	createTicks(temperature.find('.top'), 0, 214); // fahrenheit
+	createTicks(temperature.find('.bottom'), -18, 101); // celcius
+	
+	createTicks(length.find('.top'), 0, 118.5); // inch
+	createTicks(length.find('.bottom'), 0, 301); // centimeter
+});
+</script>
+</html>
