@@ -106,13 +106,16 @@ jQuery(function($) {
 	var length2 = $('.ruler.length2');
 	var temperature = $('.ruler.temperature');
 
-	function createTicks(side, bottom, top) {
+	function createTicks(side, bottom, top, divisor) {
+		if (typeof divisor == 'undefined' || typeof divisor != 'number') {
+			divisor = 1;
+		}
 		var ticks = top - bottom;
 		var space = width / ticks;
 		for (var i=bottom, s=0; s<=width; i+=1, s+=space) {
 			var t = tick.clone().css('left', s);
 			if (i%10 == 0) {
-				side.append(digit.clone().text(i).css('left', s));
+				side.append(digit.clone().text(i/divisor).css('left', s));
 				t.addClass('half');
 			} else if (i%5 == 0) {
 				t.addClass('quarter');
@@ -130,7 +133,7 @@ jQuery(function($) {
 	createTicks(length.find('.top'), 0, 118.5); // inch
 	createTicks(length.find('.bottom'), 0, 301); // centimeter
 
-	createTicks(length2.find('.top'), 0, 10.1); // inch
+	createTicks(length2.find('.top'), 0, 101, 10); // inch
 	createTicks(length2.find('.bottom'), 0, 256.54); // centimeter
 });
 </script>
