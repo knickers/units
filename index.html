@@ -106,7 +106,7 @@ jQuery(function($) {
 	var length = $('.ruler.length');
 	var length2 = $('.ruler.length2');
 	var temperature = $('.ruler.temperature');
-	
+
 	function createTicks(side, bottom, top) {
 		var ticks = top - bottom;
 		var space = width / ticks;
@@ -121,16 +121,16 @@ jQuery(function($) {
 			side.append(t);
 		}
 	}
-	
+
 	createTicks(speed.find('.top'), 0, 211); // miles
 	createTicks(speed.find('.bottom'), 0, 341); // kilometers
-	
+
 	createTicks(temperature.find('.top'), 0, 214); // fahrenheit
 	createTicks(temperature.find('.bottom'), -18, 101); // celcius
-	
+
 	createTicks(length.find('.top'), 0, 118.5); // inch
 	createTicks(length.find('.bottom'), 0, 301); // centimeter
-	
+
 	createTicks(length2.find('.top'), 0, 10.1); // inch
 	createTicks(length2.find('.bottom'), 0, 256.54); // centimeter
 });
