@@ -3,7 +3,6 @@
 <head>
 <title>Ruler</title>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <style>
 	* {
@@ -60,7 +59,7 @@
 <body>
 	<div class="tick"></div>
 	<div class="digit"></div>
-	<div class="ruler speed">
+	<div id="speed" class="ruler">
 		<div class="top">
 			<div class="unit">MPH</div>
 		</div>
@@ -69,7 +68,7 @@
 		</div>
 	</div>
 	<br><br>
-	<div class="ruler temperature">
+	<div id="temperature" class="ruler">
 		<div class="top">
 			<div class="unit">&deg;F</div>
 		</div>
@@ -78,7 +77,7 @@
 		</div>
 	</div>
 	<br><br>
-	<div class="ruler length">
+	<div id="length" class="ruler">
 		<div class="top">
 			<div class="unit">in</div>
 		</div>
@@ -87,7 +86,7 @@
 		</div>
 	</div>
 	<br><br>
-	<div class="ruler length2">
+	<div id="length2" class="ruler">
 		<div class="top">
 			<div class="unit">in</div>
 		</div>
@@ -96,7 +95,7 @@
 		</div>
 	</div>
 	<br><br>
-	<div class="ruler distance">
+	<div id="distance" class="ruler">
 		<div class="top">
 			<div class="unit">Mile</div>
 		</div>
@@ -107,15 +106,15 @@
 </body>
 
 <script type="text/javascript">
-jQuery(function($) {
-	var tick = $('.tick');
-	var digit = $('.digit');
-	var speed = $('.ruler.speed');
-	var width = speed.innerWidth();
-	var length = $('.ruler.length');
-	var length2 = $('.ruler.length2');
-	var distance = $('.ruler.distance');
-	var temperature = $('.ruler.temperature');
+(function() {
+	var tick = document.querySelector('.tick');
+	var digit = document.querySelector('.digit');
+	var width = document.body.clientWidth;
+	var speed = document.getElementById('speed');
+	var length = document.getElementById('length');
+	var length2 = document.getElementById('length2');
+	var distance = document.getElementById('distance');
+	var temperature = document.getElementById('temperature');
 
 	function createTicks(side, begin, end, divisor) {
 		if (typeof divisor == 'undefined' || typeof divisor != 'number') {
@@ -126,31 +125,36 @@ jQuery(function($) {
 		var ticks = end - begin;
 		var space = width / ticks;
 		for (i, s*=space; s<=width; i+=1, s+=space) {
-			var t = tick.clone().css('left', s);
+			var t = tick.cloneNode();
+			t.style.left = s+'px';
 			if (i%10 == 0) {
-				side.append(digit.clone().text(i/divisor).css('left', s));
-				t.addClass('half');
-			} else if (i%5 == 0) {
-				t.addClass('quarter');
+				var d = digit.cloneNode();
+				d.innerHTML = i / divisor;
+				d.style.left = s+'px';
+				side.appendChild(d);
+				t.classList.add('half');
 			}
-			side.append(t);
+			else if (i%5 == 0) {
+				t.classList.add('quarter');
+			}
+			side.appendChild(t);
 		}
 	}
 
-	createTicks(speed.find('.top'), 0, 211.9); // miles per hour
-	createTicks(speed.find('.bottom'), 0, 341); // kilometers per hour
+	createTicks(speed.querySelector('.top'), 0, 211.9); // miles per hour
+	createTicks(speed.querySelector('.bottom'), 0, 341); // kilometers per hour
 
-	createTicks(temperature.find('.top'), 0, 214); // fahrenheit
-	createTicks(temperature.find('.bottom'), -17.8, 101.1); // celcius
+	createTicks(temperature.querySelector('.top'), 0, 214); // fahrenheit
+	createTicks(temperature.querySelector('.bottom'), -17.8, 101.1); // celcius
 
-	createTicks(length.find('.top'), 0, 118.5); // inch
-	createTicks(length.find('.bottom'), 0, 301); // centimeter
+	createTicks(length.querySelector('.top'), 0, 118.5); // inch
+	createTicks(length.querySelector('.bottom'), 0, 301); // centimeter
 
-	createTicks(length2.find('.top'), 0, 101, 10); // inch
-	createTicks(length2.find('.bottom'), 0, 256.54); // millimeter
+	createTicks(length2.querySelector('.top'), 0, 101, 10); // inch
+	createTicks(length2.querySelector('.bottom'), 0, 256.54); // millimeter
 
-	createTicks(distance.find('.top'), 0, 124.9); // mile
-	createTicks(distance.find('.bottom'), 0, 201); // kilometer
-});
+	createTicks(distance.querySelector('.top'), 0, 124.9); // mile
+	createTicks(distance.querySelector('.bottom'), 0, 201); // kilometer
+})();
 </script>
 </html>
