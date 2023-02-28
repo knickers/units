@@ -117,13 +117,15 @@ jQuery(function($) {
 	var distance = $('.ruler.distance');
 	var temperature = $('.ruler.temperature');
 
-	function createTicks(side, bottom, top, divisor) {
+	function createTicks(side, begin, end, divisor) {
 		if (typeof divisor == 'undefined' || typeof divisor != 'number') {
 			divisor = 1;
 		}
-		var ticks = top - bottom;
+		var i = Math.ceil(begin);
+		var s = Math.abs(begin - i);
+		var ticks = end - begin;
 		var space = width / ticks;
-		for (var i=bottom, s=0; s<=width; i+=1, s+=space) {
+		for (i, s*=space; s<=width; i+=1, s+=space) {
 			var t = tick.clone().css('left', s);
 			if (i%10 == 0) {
 				side.append(digit.clone().text(i/divisor).css('left', s));
@@ -135,11 +137,11 @@ jQuery(function($) {
 		}
 	}
 
-	createTicks(speed.find('.top'), 0, 211); // miles
-	createTicks(speed.find('.bottom'), 0, 341); // kilometers
+	createTicks(speed.find('.top'), 0, 211.9); // miles per hour
+	createTicks(speed.find('.bottom'), 0, 341); // kilometers per hour
 
 	createTicks(temperature.find('.top'), 0, 214); // fahrenheit
-	createTicks(temperature.find('.bottom'), -18, 101); // celcius
+	createTicks(temperature.find('.bottom'), -17.8, 101.1); // celcius
 
 	createTicks(length.find('.top'), 0, 118.5); // inch
 	createTicks(length.find('.bottom'), 0, 301); // centimeter
